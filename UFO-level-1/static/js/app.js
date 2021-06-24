@@ -1,48 +1,53 @@
 // Get a reference to the table body
 var tbody = d3.select("tbody");
-// Console.log the weather data from data.js
-console.log(data);
+// Console.log for sanity test
+//console.log(data);
 
-// // Step 1: Loop Through `data` and console.log each weather report object
-data.forEach(function(weatherReport) {
-    console.log(weatherReport);
-});
+// loop through data and use d3 to update the columns/rows with values needed
+function buildTable(data) {
+    //use tbody.html("") to clear out rows to reset and populate the table
+    tbody.html("");
+    data.forEach(function(ufoData) {
 
-// // Step 2:  Use d3 to append one table row `tr` for each weather report object
-// // Don't worry about adding cells or text yet, just try appending the `tr` elements.
-data.forEach(function(weatherReport) {
-    console.log(weatherReport);
-    var row = tbody.append("tr");
-});
+        var row = tbody.append("tr");
+        Object.entries(ufoData).forEach(function([key, value]) {
 
-// // Step 3:  Use `Object.entries` to console.log each weather report value
-data.forEach(function(weatherReport) {
-    console.log(weatherReport);
-    var row = tbody.append("tr");
+      // Append a cell to the row for each value within our data
+        var cell = row.append("td");
+        cell.text(value);
+        });
+    });
+}
+//Step 6: Filter the table and build the filtered table 
 
-    Object.entries(weatherReport).forEach(function([key, value]) {
-        console.log(key, value);
-});
-});
+// Assign the data from `data.js` to a new variable
+var sightings = data;
 
-// // Step 4: Use d3 to append 1 cell per weather report value (weekday, date, high, low)
-data.forEach(function(weatherReport) {
-    console.log(weatherReport);
-    var row = tbody.append("tr");
+// Select the button
+var button = d3.selectAll("#filter-btn");
 
-    Object.entries(weatherReport).forEach(function([key, value]) {
-    console.log(key, value);
-    // Append a cell to the row for each value
-    // in the weather report object
-    var cell = row.append("td");
-   });
- });
+// Select the form
+var form = d3.selectAll("#filters");
 
-// step 5 update each cell's text with values from the data
-data.forEach((weatherReport) => {
-  var row = tbody.append("tr");
-  Object.entries(weatherReport).forEach(([key, value]) => {
-    var cell = row.append("td");
-    cell.text(value);
-  });
-});
+// Create event handlers 
+button.on("click", runEnter);
+
+// Complete the event handler function for the form
+function runEnter() {
+  // Prevent the page from refreshing
+  d3.event.preventDefault();
+
+  // Select the input element and get the appropriate value
+  var inputElement = d3.select("#datetime").property("value");
+  console.log(inputElement);
+
+  // Get the value property of the input element
+  var inputValue = d3.select("date");
+
+  // Use the form input to filter the data by date
+  var filteredData = sightings.filter(sighting => sighting.datetime === inputElement);
+  console.log(filteredData);
+  buildTable(filteredData);
+};
+
+buildTable(data);

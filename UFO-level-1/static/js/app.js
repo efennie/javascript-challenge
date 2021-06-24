@@ -18,7 +18,7 @@ function buildTable(data) {
         });
     });
 }
-//Step 6: Filter the table and build the filtered table 
+//Filter the table and build the filtered table 
 
 // Assign the data from `data.js` to a new variable
 var sightings = data;
